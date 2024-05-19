@@ -3,6 +3,8 @@ export interface card {
   name: string;
   lname: string;
   country: string;
+  colorIndex?: string;
+  id: string;
 }
 
 export interface cardWithProperties extends card {
@@ -10,7 +12,7 @@ export interface cardWithProperties extends card {
 }
 
 export interface apiResult {
-  results: object;
+  results: [];
   info: object;
 }
 
@@ -70,4 +72,9 @@ export interface person {
     thumbnail: string;
   };
   nat: string;
+}
+
+export interface customPerson extends person {
+  deleted: boolean;
+  hidden: boolean;
 }

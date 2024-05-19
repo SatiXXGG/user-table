@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 * {
-    color: black;
-    font: system-ui;
+  color: black;
+  font: system-ui;
+}
+
+.gray {
+  background-color: gray;
+}
+
+.whites {
+  background-color: whitesmoke;
 }
