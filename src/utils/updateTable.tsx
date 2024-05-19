@@ -7,10 +7,8 @@ export default function updateTable(
   state: tableState,
   action: reducerType
 ): tableState {
-  // this will only use in case "order-by-country"
-
-  const newUsers = structuredClone(state.users);
-  const filterClone = structuredClone(state.filteredUsers);
+  const filterClone: customPerson[] =
+    state.filteredUsers != null ? [...state.filteredUsers] : [];
   let index = 0;
 
   switch (action.type) {
@@ -46,15 +44,13 @@ export default function updateTable(
 
         return {
           ...state,
-          users: newUsers,
           filteredUsers: filterClone,
           isOrdered: true,
         };
       } else {
         return {
           ...state,
-          users: newUsers,
-          filteredUsers: newUsers.results,
+          filteredUsers: state.users.results,
           isOrdered: false,
         };
       }
@@ -83,6 +79,11 @@ export default function updateTable(
       return {
         ...state,
         filteredUsers: filterClone,
+      };
+    case "set-loading":
+      return {
+        ...state,
+        isLoading: action.payload,
       };
   }
 

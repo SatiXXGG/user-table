@@ -1,22 +1,30 @@
-import { createContext, useEffect, useReducer } from "react";
+import { ContextType, createContext, useEffect, useReducer } from "react";
 import Card from "./components/card";
-import { customPerson, person } from "./types/cardTypes";
+import { customPerson } from "./types/cardTypes";
 import Button from "./components/button";
 import updateTable from "./utils/updateTable";
 import { initialState } from "./utils/variables";
 import { reduceArgs } from "./types/reducer";
 
-export const reduceContext = createContext(initialState);
+export const reduceContext = createContext<ContextType | undefined>(undefined);
 
 async function GetUsers(dispatch: CallableFunction) {
   await fetch("https://randomuser.me/api/?page=1&results=100&seed=abc").then(
     (res) => {
-      res.json().then((res) => {
-        dispatch({
-          type: "set-users",
-          payload: res,
+      res
+        .json()
+        .then((res) => {
+          dispatch({
+            type: "set-users",
+            payload: res,
+          });
+        })
+        .finally(() => {
+          dispatch({
+            type: "set-loading",
+            payload: false,
+          });
         });
-      });
     }
   );
 }
@@ -28,6 +36,10 @@ function App() {
   );
 
   useEffect(() => {
+    dispatch({
+      type: "set-loading",
+      payload: true,
+    });
     GetUsers(dispatch);
   }, []);
 
@@ -38,7 +50,7 @@ function App() {
       </h1>
       <div className="text-center justify-center mt-5 mx-auto w-full flex">
         <Button
-          title="Use Colors"
+          title={tableState.useColors ? "Don't use colors" : "Use colors"}
           func={() => {
             dispatch({
               type: "set-colors-enabled",
@@ -69,7 +81,9 @@ function App() {
           onChange={() =>
             dispatch({
               type: "order-input-update",
-              payload: document.getElementById("country-input")?.value,
+              payload: (
+                document.getElementById("country-input") as HTMLInputElement
+              )?.value,
             })
           }
         ></input>
@@ -84,6 +98,10 @@ function App() {
             <th scope="col">Accions</th>
           </tr>
         </thead>
+
+        {tableState.isLoading && (
+          <h1 className="text-2xl text-center justify-center">Loading...</h1>
+        )}
 
         <tbody className="">
           {tableState.filteredUsers?.map((info: customPerson) => {

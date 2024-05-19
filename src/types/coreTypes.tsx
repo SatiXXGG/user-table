@@ -1,14 +1,15 @@
-import { apiResult } from "./cardTypes";
+import { apiResult, customPerson } from "./cardTypes";
 
 export interface tableState {
   users: {
     results: [];
   };
 
-  filteredUsers: [];
+  filteredUsers: customPerson[];
   useColors: boolean;
   currentSort: string;
   isOrdered: boolean;
+  isLoading: boolean;
 }
 
 export type reducerType =
@@ -33,4 +34,8 @@ export type reducerType =
   | {
       type: "order-input-update";
       payload: string;
+    }
+  | {
+      type: "set-loading";
+      payload: boolean;
     };
