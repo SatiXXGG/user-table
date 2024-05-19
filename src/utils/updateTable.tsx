@@ -28,7 +28,7 @@ export default function updateTable(
       break;
     case "delete-user":
       index = filterClone.findIndex(
-        (user: person) => user.id.value === action.payload
+        (user: person) => user.email === action.payload
       );
 
       filterClone[index].deleted = true;
@@ -60,25 +60,24 @@ export default function updateTable(
       }
     case "order-input-update":
       if (action.payload != "") {
-        filterClone.forEach(
-          (person: customPerson, index: number, theArray: any) => {
-            if (
-              person.location.country
-                .toLowerCase()
-                .includes(action.payload.toLowerCase())
-            ) {
-              theArray[index].hidden = false;
-            } else {
-              theArray[index].hidden = true;
-            }
+        filterClone.forEach((person: customPerson, index: number, theArray) => {
+          const item: customPerson = theArray[index];
+
+          if (
+            person.location.country
+              .toLowerCase()
+              .includes(action.payload.toLowerCase())
+          ) {
+            item.hidden = false;
+          } else {
+            item.hidden = true;
           }
-        );
+        });
       } else {
-        filterClone.forEach(
-          (person: customPerson, index: number, theArray: any) => {
-            theArray[index].hidden = false;
-          }
-        );
+        filterClone.forEach((_, index: number, theArray) => {
+          const item: customPerson = theArray[index];
+          item.hidden = false;
+        });
       }
 
       return {

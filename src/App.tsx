@@ -6,7 +6,7 @@ import updateTable from "./utils/updateTable";
 import { initialState } from "./utils/variables";
 import { reduceArgs } from "./types/reducer";
 
-export const reduceContext = createContext();
+export const reduceContext = createContext(initialState);
 
 async function GetUsers(dispatch: CallableFunction) {
   await fetch("https://randomuser.me/api/?page=1&results=100&seed=abc").then(
@@ -101,9 +101,9 @@ function App() {
                 name={info.name.first}
                 lname={info.name.last}
                 country={info.location.country}
-                key={info.id.value + Math.random()}
+                key={info.email}
                 colorIndex={tableState.useColors ? color : ""}
-                id={info.id.value}
+                id={info.email}
               ></Card>
             );
           })}
