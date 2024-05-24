@@ -38,4 +38,8 @@ export type reducerType =
   | {
       type: "set-loading";
       payload: boolean;
+    }
+  | {
+      type: "add-users";
+      payload: customPerson[];
     };

@@ -1,4 +1,4 @@
-import { ContextType, createContext, useEffect, useReducer } from "react";
+import { ContextType, createContext, useEffect, useReducer, useState } from "react";
 import Card from "./components/card";
 import { customPerson } from "./types/cardTypes";
 import Button from "./components/button";
@@ -8,46 +8,48 @@ import { reduceArgs } from "./types/reducer";
 
 export const reduceContext = createContext<ContextType | undefined>(undefined);
 
-async function GetUsers(dispatch: CallableFunction) {
-  await fetch("https://randomuser.me/api/?page=1&results=100&seed=abc").then(
-    (res) => {
-      res
-        .json()
-        .then((res) => {
+async function GetUsers(dispatch: CallableFunction, pageNumber: number) {
+  await fetch(
+    `https://randomuser.me/api/?page=${pageNumber}&results=10&seed=santixxgg`
+  ).then((res) => {
+    res
+      .json()
+      .then((res) => {
+        if (pageNumber === 1) {
           dispatch({
             type: "set-users",
             payload: res,
           });
-        })
-        .finally(() => {
+        } else {
           dispatch({
-            type: "set-loading",
-            payload: false,
+            type: "add-users",
+            payload: res.results,
           });
+        }
+      })
+      .finally(() => {
+        dispatch({
+          type: "set-loading",
+          payload: false,
         });
-    }
-  );
+      });
+  });
 }
 
 function App() {
-  const [tableState, dispatch] = useReducer<reduceArgs>(
-    updateTable,
-    initialState
-  );
-
+  const [tableState, dispatch] = useReducer<reduceArgs>(updateTable, initialState);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     dispatch({
       type: "set-loading",
       payload: true,
     });
-    GetUsers(dispatch);
+    GetUsers(dispatch, 1);
   }, []);
 
   return (
     <reduceContext.Provider value={[tableState, dispatch]}>
-      <h1 className="text-center text-6xl mt-12 mb-5 font-bold">
-        React test 💻
-      </h1>
+      <h1 className="text-center text-6xl mt-12 mb-5 font-bold">React test 💻</h1>
       <div className="text-center justify-center mt-5 mx-auto w-full flex">
         <Button
           title={tableState.useColors ? "Don't use colors" : "Use colors"}
@@ -62,13 +64,10 @@ function App() {
           title="Reset"
           func={() => {
             dispatch({ type: "reset" });
-            GetUsers(dispatch);
           }}
         ></Button>
         <Button
-          title={
-            tableState.isOrdered ? "Dont order by country" : "Order by country"
-          }
+          title={tableState.isOrdered ? "Dont order by country" : "Order by country"}
           func={() => dispatch({ type: "order-by-country" })}
         ></Button>
         <input
@@ -81,9 +80,8 @@ function App() {
           onChange={() =>
             dispatch({
               type: "order-input-update",
-              payload: (
-                document.getElementById("country-input") as HTMLInputElement
-              )?.value,
+              payload: (document.getElementById("country-input") as HTMLInputElement)
+                ?.value,
             })
           }
         ></input>
@@ -98,10 +96,6 @@ function App() {
             <th scope="col">Accions</th>
           </tr>
         </thead>
-
-        {tableState.isLoading && (
-          <h1 className="text-2xl text-center justify-center">Loading...</h1>
-        )}
 
         <tbody className="">
           {tableState.filteredUsers?.map((info: customPerson) => {
@@ -127,6 +121,20 @@ function App() {
           })}
         </tbody>
       </table>
+
+      {tableState.isLoading && (
+        <h1 className="text-2xl text-center justify-center">Loading...</h1>
+      )}
+
+      <div className="my-4 flex justify-center">
+        <Button
+          title="Load more"
+          func={() => {
+            GetUsers(dispatch, page + 1);
+            setPage(page + 1);
+          }}
+        ></Button>
+      </div>
     </reduceContext.Provider>
   );
 }

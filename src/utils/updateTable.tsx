@@ -1,6 +1,7 @@
 import { customPerson, person } from "../types/cardTypes";
 import { reducerType, tableState } from "../types/coreTypes";
 import compareByCountry from "./compareByCountry";
+import resetUsers from "./resetUsers";
 import { initialState } from "./variables";
 
 export default function updateTable(
@@ -37,7 +38,13 @@ export default function updateTable(
       };
 
     case "reset":
-      return initialState;
+      resetUsers(state.users.results);
+      resetUsers(state.filteredUsers);
+      return {
+        ...initialState,
+        filteredUsers: state.users.results,
+        users: state.users,
+      };
     case "order-by-country":
       if (state.isOrdered !== true) {
         filterClone.sort(compareByCountry);
@@ -84,6 +91,11 @@ export default function updateTable(
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case "add-users":
+      return {
+        ...state,
+        filteredUsers: filterClone.concat(action.payload),
       };
   }
 
