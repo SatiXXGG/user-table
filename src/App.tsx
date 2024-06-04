@@ -4,14 +4,9 @@ import { customPerson } from "./types/cardTypes";
 import Button from "./components/button";
 import updateTable from "./utils/updateTable";
 import { initialState } from "./utils/variables";
-import { reduceArgs } from "./types/reducer";
-import { reducerType } from "./types/coreTypes";
+import { createArgs, reduceArgs } from "./types/reducer";
 
-const artDispatch = (a: reducerType) => {
-  console.log(a);
-};
-
-export const reduceContext = createContext([initialState, artDispatch]);
+export const reduceContext = createContext<createArgs | undefined>(undefined);
 
 async function GetUsers(dispatch: CallableFunction, pageNumber: number) {
   await fetch(
