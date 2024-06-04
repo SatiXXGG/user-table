@@ -1,12 +1,17 @@
-import { ContextType, createContext, useEffect, useReducer, useState } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import Card from "./components/card";
 import { customPerson } from "./types/cardTypes";
 import Button from "./components/button";
 import updateTable from "./utils/updateTable";
 import { initialState } from "./utils/variables";
 import { reduceArgs } from "./types/reducer";
+import { reducerType } from "./types/coreTypes";
 
-export const reduceContext = createContext<ContextType | undefined>(undefined);
+const artDispatch = (a: reducerType) => {
+  console.log(a);
+};
+
+export const reduceContext = createContext([initialState, artDispatch]);
 
 async function GetUsers(dispatch: CallableFunction, pageNumber: number) {
   await fetch(

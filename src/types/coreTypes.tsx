@@ -42,4 +42,8 @@ export type reducerType =
   | {
       type: "add-users";
       payload: customPerson[];
+    }
+  | {
+      type: "default";
+      payload: null;
     };
