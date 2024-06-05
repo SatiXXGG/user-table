@@ -7,4 +7,6 @@ export const initialState: tableState = {
   useColors: false,
   currentSort: "",
   isOrdered: false,
+  filteredUsers: null,
+  isLoading: false,
 };

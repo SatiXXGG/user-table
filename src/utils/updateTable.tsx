@@ -26,9 +26,7 @@ export default function updateTable(
       };
       break;
     case "delete-user":
-      index = filterClone.findIndex(
-        (user: person) => user.email === action.payload
-      );
+      index = filterClone.findIndex((user: person) => user.email === action.payload);
 
       filterClone[index].deleted = true;
 
@@ -39,7 +37,7 @@ export default function updateTable(
 
     case "reset":
       resetUsers(state.users.results);
-      resetUsers(state.filteredUsers);
+      resetUsers(state.filteredUsers ?? []);
       return {
         ...initialState,
         filteredUsers: state.users.results,

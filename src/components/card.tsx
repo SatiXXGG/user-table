@@ -1,17 +1,10 @@
 import { useContext } from "react";
 import { card } from "../types/cardTypes";
 import { reduceContext } from "../App";
-import { reduceArgs } from "../types/reducer";
+import { createArgs } from "../types/reducer";
 
-export default function Card({
-  img,
-  name,
-  lname,
-  country,
-  colorIndex,
-  id,
-}: card) {
-  const [tableState, dispatch] = useContext<reduceArgs>(reduceContext);
+export default function Card({ img, name, lname, country, colorIndex, id }: card) {
+  const [, dispatch] = useContext(reduceContext) as createArgs;
 
   return (
     <tr className={colorIndex}>

@@ -103,7 +103,7 @@ function App() {
               return;
             }
 
-            const index: number = tableState.filteredUsers?.indexOf(info);
+            const index: number = tableState.filteredUsers?.indexOf(info) ?? 10;
             const isPair: boolean = index % 2 === 1;
             const color = isPair ? "gray" : "whites";
 

@@ -5,7 +5,7 @@ export interface tableState {
     results: [];
   };
 
-  filteredUsers: customPerson[];
+  filteredUsers: customPerson[] | null;
   useColors: boolean;
   currentSort: string;
   isOrdered: boolean;
